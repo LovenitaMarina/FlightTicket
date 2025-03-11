@@ -57,20 +57,15 @@ public class Shoppingcart {
 		//4)sort the original list of step 3
 		List<String> sortedList= originalList.stream().sorted().collect(Collectors.toList());
 		//5)compare original list vs sorted list
-		Assert.assertEquals(originalList.equals(sortedList), true, "The first list is sorted");
-		System.out.println("The first list is sorted");
-		originalList.stream().forEach(x->System.out.println(x));
-		
+		Assert.assertEquals(originalList.equals(sortedList), true);
 		
 		driver.findElement(By.xpath("//tr/th[1]")).click();
 		elementList = driver.findElements(By.cssSelector("tr td:first-child"));
 		originalList = elementList.stream().map(x->x.getText()).collect(Collectors.toList())  ;
 		sortedList= originalList.stream().sorted().collect(Collectors.toList());
-		Assert.assertNotEquals(originalList, sortedList, "the second list is not sorted"  );
-		System.out.println("The second list is not sorted");
-		originalList.stream().forEach(x->System.out.println(x));
+		Assert.assertEquals(originalList.equals(sortedList), true, "the list is not sorted"  );
 		
-		driver.close();
+		originalList.stream().forEach(x->System.out.println(x));
 	}
 
 	public void calendarUpdate(WebDriver driver) {

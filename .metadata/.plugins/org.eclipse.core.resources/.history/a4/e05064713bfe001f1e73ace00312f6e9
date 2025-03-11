@@ -67,10 +67,8 @@ public class Shoppingcart {
 		originalList = elementList.stream().map(x->x.getText()).collect(Collectors.toList())  ;
 		sortedList= originalList.stream().sorted().collect(Collectors.toList());
 		Assert.assertNotEquals(originalList, sortedList, "the second list is not sorted"  );
-		System.out.println("The second list is not sorted");
-		originalList.stream().forEach(x->System.out.println(x));
 		
-		driver.close();
+		originalList.stream().forEach(x->System.out.println(x));
 	}
 
 	public void calendarUpdate(WebDriver driver) {

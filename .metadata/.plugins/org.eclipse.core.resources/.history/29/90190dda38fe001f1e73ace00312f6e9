@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -24,7 +22,7 @@ public class Shoppingcart {
 		// String[] x = "Tomato - 1 Kg".split(" - ");
 		// System.out.println(x[0]);
 
-		//System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\driver\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\driver\\chromedriver.exe");
 
 		WebDriver driver = new ChromeDriver();
 		driver.manage().window().maximize();
@@ -37,8 +35,7 @@ public class Shoppingcart {
 		// cart.addToBasket(driver, toBeAdded);
 		// cart.checkOut(driver);
 		// cart.calendarCheck(driver);
-		//cart.calendarUpdate(driver);
-		cart.lamdaList(driver);
+		cart.calendarUpdate(driver);
 
 		// driver.close();
 	}
@@ -47,30 +44,13 @@ public class Shoppingcart {
 
 		driver.get("https://rahulshettyacademy.com/seleniumPractise/#/offers");
 		//1)click on column
-		driver.findElement(By.xpath("//tr/th[1]")).click();
+		
 		
 		//2)capture all webelements into a list
-		List<WebElement> elementList = driver.findElements(By.cssSelector("tr td:first-child"));
-		
 		//3)capture text of all webelements into a new (original) list
-		List<String> originalList = elementList.stream().map(x->x.getText()).collect(Collectors.toList())  ;
 		//4)sort the original list of step 3
-		List<String> sortedList= originalList.stream().sorted().collect(Collectors.toList());
 		//5)compare original list vs sorted list
-		Assert.assertEquals(originalList.equals(sortedList), true, "The first list is sorted");
-		System.out.println("The first list is sorted");
-		originalList.stream().forEach(x->System.out.println(x));
 		
-		
-		driver.findElement(By.xpath("//tr/th[1]")).click();
-		elementList = driver.findElements(By.cssSelector("tr td:first-child"));
-		originalList = elementList.stream().map(x->x.getText()).collect(Collectors.toList())  ;
-		sortedList= originalList.stream().sorted().collect(Collectors.toList());
-		Assert.assertNotEquals(originalList, sortedList, "the second list is not sorted"  );
-		System.out.println("The second list is not sorted");
-		originalList.stream().forEach(x->System.out.println(x));
-		
-		driver.close();
 	}
 
 	public void calendarUpdate(WebDriver driver) {

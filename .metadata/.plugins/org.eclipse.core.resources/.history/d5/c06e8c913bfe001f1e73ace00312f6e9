@@ -69,8 +69,6 @@ public class Shoppingcart {
 		Assert.assertNotEquals(originalList, sortedList, "the second list is not sorted"  );
 		System.out.println("The second list is not sorted");
 		originalList.stream().forEach(x->System.out.println(x));
-		
-		driver.close();
 	}
 
 	public void calendarUpdate(WebDriver driver) {
