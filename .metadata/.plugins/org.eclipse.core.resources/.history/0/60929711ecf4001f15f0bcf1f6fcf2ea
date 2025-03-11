@@ -1,0 +1,123 @@
+package training;
+
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class Shoppingcart {
+
+	public static void main(String[] args) throws InterruptedException {
+
+		// String[] x = "Tomato - 1 Kg".split(" - ");
+		// System.out.println(x[0]);
+
+		System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\driver\\chromedriver.exe");
+
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		// driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+		driver.get("https://rahulshettyacademy.com/seleniumPractise");
+		String[] toBeAdded = { "Cucumber", "Brinjal", "Musk Melon", "Mango" };
+		Thread.sleep(1000);
+		// AddToBasket(driver, toBeAdded);
+		Shoppingcart cart = new Shoppingcart();
+		cart.AddToBasket(driver, toBeAdded);
+		cart.checkOut(driver);
+		cart.CalendarCheck(driver);
+
+		// driver.close();
+	}
+
+	public void CalendarCheck(WebDriver driver) {
+		
+		driver.navigate().back();
+		driver.findElement(By.linkText("Top Deals")).click();
+		Set <String> windows = driver.getWindowHandles();
+		Iterator<String> it = windows.iterator();
+		String parent = it.next();
+		String child = it.next();
+		driver.switchTo().window(child);
+		
+		String monthNumber = "6";
+		String date = "15";
+		String year = "2027";
+		
+		driver.findElement(By.cssSelector("button.react-date-picker__calendar-button.react-date-picker__button")).click();
+		//WebElement monthAndYear = driver.findElement(By.cssSelector("span.react-calendar__navigation__label__labelText"));
+		int selectedYear = Integer.parseInt(driver.findElement(By.cssSelector("input[name='date']")).getAttribute("value").split("-")[1]);
+		
+		while (Integer.parseInt(selectedYear) != Integer.parseInt(year) ) {
+			if (Integer.parseInt(selectedYear) > Integer.parseInt(year)) {
+				driver.findElement(By.cssSelector("button.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button")).click();	
+			}
+			if (Integer.parseInt(selectedYear) < Integer.parseInt(year)) {
+				driver.findElement(By.cssSelector("button.react-calendar__navigation__arrow.react-calendar__navigation__next2-button")).click();
+				
+				
+			}
+		}
+		
+		
+		
+	}
+	
+	
+	
+	public void AddToBasket(WebDriver driver, String[] toBeAdded) throws InterruptedException {
+
+		driver.findElement(By.xpath("//h4[text()='Beetroot - 1 Kg']/parent:: div/div/button")).click();
+
+		driver.findElement(By.xpath("//h4[text()='Tomato - 1 Kg']/parent:: div/div/button")).click();
+
+		List<WebElement> items = driver.findElements(By.cssSelector("h4.product-name"));
+		for (WebElement item : items) {
+
+			List<String> groceriesList = Arrays.asList(toBeAdded);
+			// System.out.println(groceriesList.contains(item.getText()));
+			// System.out.print(item.getText() +
+			// item.getText().contains(groceriesList.get(0)));
+			String[] name = item.getText().split(" - ");
+
+			if (groceriesList.contains(name[0])) {
+				int i = items.indexOf(item) + 1;
+				System.out.println(item.getText() + " " + items.indexOf(item));
+				driver.findElement(By.xpath("//div[@class='products']/div[@class='product'][" + i + "]/div/button"))
+						.click();
+
+			}
+
+		}
+
+	}
+
+	public void checkOut(WebDriver driver) throws InterruptedException {
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+		driver.findElement(By.xpath("//a[@class='cart-icon']")).click();
+		driver.findElement(By.xpath("//button[contains(text(),'PROCEED TO CHECKOUT')]")).click();
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input.promoCode")));
+
+		driver.findElement(By.cssSelector("input.promoCode")).sendKeys("rahulshettyacademy");
+		driver.findElement(By.cssSelector("button.promoBtn")).click();
+
+		By promoInfo = By.cssSelector("span.promoInfo");
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(promoInfo));
+
+		String promoinfo = driver.findElement(By.cssSelector("span.promoInfo")).getText();
+		System.out.println(promoinfo);
+
+	}
+}

@@ -1,0 +1,43 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class ScopeOfDriver {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\driver\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
+
+		driver.manage().window().maximize();
+		driver.get("https://www.qaclickacademy.com/practice.php");
+		//Print the count of links in the website
+		System.out.println(driver.findElements(By.tagName("a")).size());
+
+		WebElement footerDriver = driver.findElement(By.id("gf-BIG")); 
+		//Print the count of links in the footer
+		System.out.println(footerDriver.findElements(By.tagName("a")).size()); //limited Webdriver Scope
+		//Print the count of links in the first column of the footer
+		footerDriver = driver.findElement(By.cssSelector("div.footer_top_agile_w3ls table tbody tr td:first-child"));
+		System.out.println(footerDriver.findElements(By.tagName("a")).size()); 
+
+		String currentwin = driver.getWindowHandle();	
+		
+		footerDriver.findElement(By.linkText("Discount Coupons")).click();
+		driver.switchTo().window(currentwin);
+		footerDriver.findElement(By.linkText("Discount Coupons")).click();
+		driver.switchTo().window(currentwin);
+		footerDriver.findElement(By.linkText("Discount Coupons")).click();
+		driver.switchTo().window(currentwin);
+		footerDriver.findElement(By.linkText("Discount Coupons")).click();
+		driver.switchTo().window(currentwin);
+		footerDriver.findElement(By.linkText("Discount Coupons")).click();
+		driver.switchTo().window(currentwin);
+		
+		
+		driver.close();
+	}
+
+}

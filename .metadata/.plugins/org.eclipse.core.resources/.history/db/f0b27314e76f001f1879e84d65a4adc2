@@ -1,0 +1,47 @@
+package training;
+
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class Shoppingcart {
+	
+	public static void main(String[] args) throws InterruptedException {
+	
+		System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\driver\\chromedriver.exe");
+			
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		
+		driver.get("https://rahulshettyacademy.com/seleniumPractise");
+		Thread.sleep(1000);
+		
+		String[] toBeAdded = {"Cucumber","Brinjal","Musk Melon","Mango"};
+		driver.findElement(By.xpath("//h4[text()='Beetroot - 1 Kg']/parent:: div/div/button")).click();
+		
+		driver.findElement(By.xpath("//h4[text()='Tomato - 1 Kg']/parent:: div/div/button")).click();
+		
+		List<WebElement> items = driver.findElements(By.cssSelector("h4.product-name"));
+				
+		
+		for (WebElement item : items) {
+			
+			for(String grocery : toBeAdded) {
+			
+			if(item.getText().contains(grocery)) {
+				int i = items.indexOf(item)+1;
+				System.out.println(item.getText()+"    "+items.indexOf(item));
+				driver.findElement(By.xpath("//div[@class='products']/div[@class='product']["+i+"]/div/button")).click();
+				break;
+			}
+			
+			
+		}
+		
+		
+}
+}

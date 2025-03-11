@@ -1,0 +1,23 @@
+import java.util.Arrays;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class ChromeOption {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\driver\\chromedriver.exe");
+		ChromeOptions behave = new ChromeOptions();
+		behave.setAcceptInsecureCerts(true);
+		behave.setExperimentalOption("excludesSwitches",Arrays.asList("disable-popup-blocking"));
+		WebDriver driver = new ChromeDriver(behave);
+		driver.manage().window().maximize();
+		
+		
+		
+		
+	}
+
+}

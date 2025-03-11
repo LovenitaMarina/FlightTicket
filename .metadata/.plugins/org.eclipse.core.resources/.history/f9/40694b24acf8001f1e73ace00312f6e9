@@ -1,0 +1,43 @@
+package training;
+
+import java.util.ArrayList;
+import java.util.stream.Stream;
+
+public class JStreams {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		ArrayList<String> names = new ArrayList<String>();
+		names.add("Allan");
+		names.add("Thimoth");
+		names.add("Abigail");
+		names.add("theodore");
+		names.add("Aaron");
+		int count = 0;
+
+		for (String name : names) {
+			if (name.startsWith("A")) {
+				count++;
+			}
+		}
+
+		System.out.println(count);
+	}
+
+	public void stremFilter() {
+		ArrayList<String> names = new ArrayList<String>();
+		names.add("Allan");
+		names.add("Thimoth");
+		names.add("Abigail");
+		names.add("theodore");
+		names.add("Aaron");
+		long count = names.stream().filter(nm -> nm.startsWith("A")).count();
+		System.out.println(count);
+		long d = Stream.of("Abc", "AFG", "BVG", "AQW").filter(nm -> {
+			nm.startsWith("A");
+			//return false;
+		}).count();
+		System.out.println("here" + d);
+	}
+}

@@ -1,0 +1,21 @@
+package training;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class Shoppingcart {
+	
+	public static void main(String[] args) throws InterruptedException {
+	
+		System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\driver\\chromedriver.exe");
+			
+		WebDriver driver = new ChromeDriver();
+		//input[type='search']
+		
+		driver.get("https://rahulshettyacademy.com/seleniumPractise");
+		
+		
+}
+}
