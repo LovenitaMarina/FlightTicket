@@ -29,7 +29,7 @@ public class Shoppingcart {
 		WebDriver driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		// driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
-		driver.get("https://rahulshettyacademy.com/seleniumPractise");
+		//driver.get("https://rahulshettyacademy.com/seleniumPractise");
 		String[] toBeAdded = { "Cucumber", "Brinjal", "Musk Melon", "Mango" };
 		Thread.sleep(1000);
 		// AddToBasket(driver, toBeAdded);
