@@ -50,8 +50,9 @@ public class JStreams {
 //-- Ignorecase  check, will return only Roti	
 		// List<String> commonElements =
 
-		shoppingList.stream().filter(item1 -> imp.stream().anyMatch(item2 -> item1.equalsIgnoreCase(item2)))
-				.collect(Collectors.toList()).forEach(sl -> System.out.println(sl + " "));
+		 List <String> testLamda = shoppingList.stream().filter(item1 -> imp.stream().anyMatch(item2 -> item1.equalsIgnoreCase(item2)))
+				.collect(Collectors.toList());
+				//.forEach(sl -> System.out.println(sl + " "));
 
 		imp.stream().filter(item1 -> shoppingList.stream().noneMatch(item2 -> item1.equals(item2)))
 				.forEach(sl -> System.out.println(sl));

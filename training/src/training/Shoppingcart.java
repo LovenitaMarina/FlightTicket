@@ -21,10 +21,8 @@ public class Shoppingcart {
 
 	public static void main(String[] args) throws InterruptedException {
 
-		// String[] x = "Tomato - 1 Kg".split(" - ");
-		// System.out.println(x[0]);
-
-		//System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\driver\\chromedriver.exe");
+		// System.setProperty("webdriver.chrome.driver",
+		// "C:\\Selenium\\driver\\chromedriver.exe");
 
 		WebDriver driver = new ChromeDriver();
 		driver.manage().window().maximize();
@@ -32,49 +30,103 @@ public class Shoppingcart {
 		driver.get("https://rahulshettyacademy.com/seleniumPractise");
 		String[] toBeAdded = { "Cucumber", "Brinjal", "Musk Melon", "Mango" };
 		Thread.sleep(1000);
-		// AddToBasket(driver, toBeAdded);
 		Shoppingcart cart = new Shoppingcart();
 		// cart.addToBasket(driver, toBeAdded);
 		// cart.checkOut(driver);
 		// cart.calendarCheck(driver);
-		//cart.calendarUpdate(driver);
-		cart.lamdaList(driver);
+		// cart.calendarUpdate(driver);
+		//cart.lamdaList(driver, toBeAdded);
+		cart.filterUsingJavaStreams(driver, toBeAdded);
 
-		// driver.close();
+		driver.quit();
+	}
+	public void filterUsingJavaStreams(WebDriver driver, String[] toBeAdded) {
+		driver.get("https://rahulshettyacademy.com/seleniumPractise/#/offers");
+		driver.findElement(By.id("search-field")).click();
+		/*Value to test assertion failure
+		 * driver.findElement(By.id("search-field")).sendKeys("M");
+		*/
+		driver.findElement(By.id("search-field")).sendKeys(toBeAdded[toBeAdded.length-1]);
+		List<WebElement> filteredList = driver.findElements(By.xpath("//tr/td[1]"));
+		
+		filteredList.stream().filter(x->x.getText().contains(toBeAdded[toBeAdded.length-1])).forEach(x->System.out.println(x.getText()));
+		List<String> verifiedList = filteredList.stream().map(x-> x.getText()).filter(x-> x.equals(toBeAdded[toBeAdded.length-1])).collect(Collectors.toList());
+		
+		Assert.assertEquals(filteredList.size(), verifiedList.size());
 	}
 
-	public void lamdaList(WebDriver driver) {
+	public void lamdaList(WebDriver driver, String[] toBeAdded) throws InterruptedException {
 
 		driver.get("https://rahulshettyacademy.com/seleniumPractise/#/offers");
-		//1)click on column
+		// TODO get the list of items from the table and check whether the list is
+		// sorted
 		driver.findElement(By.xpath("//tr/th[1]")).click();
-		
-		//2)capture all webelements into a list
+
+		// 1)capture all webelements into a list
 		List<WebElement> elementList = driver.findElements(By.cssSelector("tr td:first-child"));
-		
-		//3)capture text of all webelements into a new (original) list
-		List<String> originalList = elementList.stream().map(x->x.getText()).collect(Collectors.toList())  ;
-		//4)sort the original list of step 3
-		List<String> sortedList= originalList.stream().sorted().collect(Collectors.toList());
-		//5)compare original list vs sorted list
+
+		// 2)Capture text of all webelements into a new (original) list
+		List<String> originalList = elementList.stream().map(x -> x.getText()).collect(Collectors.toList());
+		// 3)sort the original list of step 2
+		List<String> sortedList = originalList.stream().sorted().collect(Collectors.toList());
+		// 4)compare original list vs sorted list
 		Assert.assertEquals(originalList.equals(sortedList), true, "The first list is sorted");
-		System.out.println("The first list is sorted");
-		originalList.stream().forEach(x->System.out.println(x));
-		
-		
+		/*
+		 * System.out.println("The first list is sorted");
+		 * originalList.stream().forEach(x -> System.out.println(x));
+		 */
+		// same check for second set of items
 		driver.findElement(By.xpath("//tr/th[1]")).click();
 		elementList = driver.findElements(By.cssSelector("tr td:first-child"));
-		originalList = elementList.stream().map(x->x.getText()).collect(Collectors.toList())  ;
-		sortedList= originalList.stream().sorted().collect(Collectors.toList());
-		Assert.assertNotEquals(originalList, sortedList, "the second list is not sorted"  );
-		System.out.println("The second list is not sorted");
-		originalList.stream().forEach(x->System.out.println(x));
+		originalList = elementList.stream().map(x -> x.getText()).collect(Collectors.toList());
+		sortedList = originalList.stream().sorted().collect(Collectors.toList());
+		Assert.assertNotEquals(originalList, sortedList, "the second list is not sorted");
+		// System.out.println("The second list is not sorted");
+
+		// --TODO Get the price of any item matching the item available in the toBeAdded
+		// list-------------------------
+		List<String> available = null;
+		List<WebElement> currentElements = null;
+		do {
+			driver.findElement(By.xpath("//tr/th[1]")).click();
+			currentElements = driver.findElements(By.xpath("//tr/td[1]"));
+			available = currentElements.stream().map(x -> x.getText())
+					.filter(a -> Arrays.asList(toBeAdded).stream().anyMatch(b -> b.equalsIgnoreCase(a)))
+					.collect(Collectors.toList());
+			// currentElements.stream().map(x -> x.getText()).forEach(x ->
+			// System.out.println(x));
+			available.stream().forEach(x -> System.out.print("\n" + x + " "));
+
+		} while (available.size() == 0);
+		Thread.sleep(1000);
+
+		String reqPrice = driver.findElement(By.xpath("//tr/td[contains(text(),'Brinjal')]/following-sibling::td[1]"))
+				.getText();
+		System.out.println(reqPrice);
+
+		// --TODO ALTERNATE Get the price of item matching item passed
+		List<String> price ; 
 		
-		driver.close();
+		do {
+		
+		elementList = driver.findElements(By.cssSelector("tr td:first-child"));
+		price = elementList.stream().filter(x -> x.getText().equalsIgnoreCase("MANGO"))
+				.map(x -> getPrice(x)).collect(Collectors.toList());
+		price.forEach(x->System.out.println(x));
+		driver.findElement(By.cssSelector("a[aria-label='Next'")).click();
+		
+		} while(price.size()==0);
+
+	}
+
+	private static String getPrice(WebElement x) {
+		String price = x.findElement(By.xpath("following-sibling::td[1]")).getText();
+		return price;
+
 	}
 
 	public void calendarUpdate(WebDriver driver) {
-		String monthNumber = "8";
+		String monthNumber = "7";
 		String date = "31";
 		String year = "2027";
 
@@ -102,7 +154,7 @@ public class Shoppingcart {
 
 	public void calendarCheck(WebDriver driver) {
 
-		// driver.navigate().back();
+		driver.navigate().back();
 		driver.findElement(By.linkText("Top Deals")).click();
 		Set<String> windows = driver.getWindowHandles();
 		Iterator<String> it = windows.iterator();
