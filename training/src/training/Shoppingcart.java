@@ -21,8 +21,7 @@ public class Shoppingcart {
 
 	public static void main(String[] args) throws InterruptedException {
 
-		// System.setProperty("webdriver.chrome.driver",
-		// "C:\\Selenium\\driver\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\driver\\chromedriver.exe");
 
 		WebDriver driver = new ChromeDriver();
 		driver.manage().window().maximize();
@@ -31,11 +30,11 @@ public class Shoppingcart {
 		String[] toBeAdded = { "Cucumber", "Brinjal", "Musk Melon", "Mango" };
 		Thread.sleep(1000);
 		Shoppingcart cart = new Shoppingcart();
-		// cart.addToBasket(driver, toBeAdded);
-		// cart.checkOut(driver);
-		// cart.calendarCheck(driver);
-		// cart.calendarUpdate(driver);
-		//cart.lamdaList(driver, toBeAdded);
+		cart.addToBasket(driver, toBeAdded);
+		cart.checkOut(driver);
+		cart.calendarCheck(driver);
+		cart.calendarUpdate(driver);
+		cart.lamdaList(driver, toBeAdded);
 		cart.filterUsingJavaStreams(driver, toBeAdded);
 
 		driver.quit();
